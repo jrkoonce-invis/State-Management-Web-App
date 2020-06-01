@@ -1,0 +1,27 @@
+<h1>Hello World</h1>
+<div id="posts-container" />
+
+<script>
+    function screenPrint(data) {
+        data.forEach(elem => {
+            var newDiv = document.createElement("div")
+            var newContent = document.createTextNode(elem.number + " : " + elem.text)
+            newDiv.appendChild(newContent)
+
+            var currentDiv = document.getElementById("posts-container"); 
+            document.body.insertBefore(newDiv, currentDiv); 
+        });
+    }
+
+    fetch('./api')
+        .then(
+            function(response) {
+                response.json().then(function(data) {
+                    screenPrint(data)
+                });
+            }
+        )
+        .catch(function(err) {
+            console.log('Fetch Error :-S', err);
+    });
+</script>
