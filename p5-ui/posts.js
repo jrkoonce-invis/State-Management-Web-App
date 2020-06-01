@@ -1,10 +1,21 @@
 outlineState = false
 
+// Colors
+inProgress = [237, 242, 141]
+inProgressOutline = [228, 202, 118]
+notStarted = [255, 95, 78]
+notStartedOutline = [216, 63, 63]
+completed = [221, 247, 168]
+completedOutline = [141, 193, 121]
+
 class Post {
 	constructor(x, y, text) {
 		this.x = x
 		this.y = y
-		this.message = text
+        this.message = text
+        
+        this.color = completed
+        this.outlineColor = completedOutline
 
         this.size = 0
         this.offset = this.size * .5
@@ -35,12 +46,12 @@ class Post {
 
         strokeWeight(5)
         if (!this.hoverState) {
-            stroke("#E4CA76")
+            stroke(this.outlineColor[0], this.outlineColor[1], this.outlineColor[2])
         } else {
             stroke(150)
         }
 
-        fill("#F2E68D")
+        fill(this.color[0], this.color[1], this.color[2])
 		rect(0 - this.offset, 0 - this.offset, this.size, this.size, 15)
 
 		scale(this.size / this.max)
@@ -50,6 +61,8 @@ class Post {
 		noStroke()
 		fill("grey")
         text(this.message, 0, 5)
+
+        this.colorCheck()
 
 		pop()
     }
@@ -69,6 +82,7 @@ class Post {
         } else {
             return false
         }
+
     }
 
     move() {
@@ -79,6 +93,19 @@ class Post {
             this.x += (this.newX - this.x) / 10
             this.y += (this.newY - this.y) / 10
             mouseMoved()
+        }
+    }
+
+    colorCheck() {
+        if (this.x >= secondThird) {
+            this.color = completed
+            this.outlineColor = completedOutline
+        } else if (this.x <= firstThird) {
+            this.color = notStarted
+            this.outlineColor = notStartedOutline
+        } else {
+            this.color = inProgress
+            this.outlineColor = inProgressOutline
         }
     }
 }
@@ -113,9 +140,9 @@ class Outline {
 
         translate(this.x, this.y)
 
-        fill(242, 230, 141, this.alpha)
+        fill(this.obj.color[0], this.obj.color[1], this.obj.color[2], this.alpha)
 		strokeWeight(5)
-		stroke(228, 202, 118, this.alpha)
+		stroke(this.obj.outlineColor[0], this.obj.outlineColor[1], this.obj.outlineColor[2], this.alpha)
         rect(0 - this.offset, 0 - this.offset, this.size, this.size, 15)
         pop()
     }

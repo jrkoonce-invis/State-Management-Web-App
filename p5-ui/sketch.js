@@ -1,7 +1,12 @@
 let posts = []
+let firstThird
+let secondThird
 
 function setup() {
 	createCanvas(windowWidth, windowHeight);
+
+	firstThird = windowWidth / 3
+	secondThird = 2 * windowWidth / 3
 }
 
 function draw() {
@@ -9,7 +14,10 @@ function draw() {
 
 	// Dividers
 	translate(0, 0)
-	line(windowWidth / 3, 0, 0, windowWidth / 3, windowHeight)
+	strokeWeight(5)
+	stroke(150)
+	line(firstThird, 0, firstThird, windowHeight)
+	line(secondThird, 0, secondThird, windowHeight)
 
 	for (let post of posts) {
 		post.update()
