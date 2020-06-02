@@ -1,4 +1,6 @@
 let posts = []
+let limbo = []
+
 let firstThird
 let secondThird
 
@@ -7,6 +9,13 @@ function setup() {
 
 	firstThird = windowWidth / 3
 	secondThird = 2 * windowWidth / 3
+
+	addButton = new AddButton(windowWidth - 1.3 * windowWidth / 20, 
+							  windowHeight - 1.3 * windowWidth / 20, 
+							  windowWidth / 20, 
+							  windowWidth / 20)
+
+	getData()
 }
 
 function draw() {
@@ -22,6 +31,8 @@ function draw() {
 	for (let post of posts) {
 		post.update()
 	}
+
+	addButton.draw()
 }
 
 function mouseClicked() {

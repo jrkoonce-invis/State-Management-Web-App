@@ -3,7 +3,7 @@ outlineState = false
 // Colors
 inProgress = [237, 242, 141]
 inProgressOutline = [228, 202, 118]
-notStarted = [255, 95, 78]
+notStarted = [245, 91, 75]
 notStartedOutline = [216, 63, 63]
 completed = [221, 247, 168]
 completedOutline = [141, 193, 121]
