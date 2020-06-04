@@ -9,10 +9,11 @@ completed = [221, 247, 168]
 completedOutline = [141, 193, 121]
 
 class Post {
-	constructor(x, y, text) {
+	constructor(x, y, text, number) {
 		this.x = x
 		this.y = y
         this.message = text
+        this.number = number
         
         this.color = completed
         this.outlineColor = completedOutline
@@ -23,7 +24,7 @@ class Post {
 		this.max = 100
         this.growSpeed = 5
         
-        this.hoverState = true
+        this.hoverState = false
         this.moveState = false
         this.newX = -1
         this.newY = -1
@@ -107,6 +108,18 @@ class Post {
             this.color = inProgress
             this.outlineColor = inProgressOutline
         }
+    }
+
+    delete() {
+        for (let i = 0; i < posts.length; i++){
+            if (posts[i] === this) {
+                posts.splice(i, 1)
+                break
+            }
+        }
+        deletePost(this.number)
+        posts.splice(posts.length - 1, 1)
+        outlineState = false
     }
 }
 

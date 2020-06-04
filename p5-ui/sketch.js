@@ -1,17 +1,23 @@
 let posts = []
-let limbo = []
+let postNum
 
 let firstThird
 let secondThird
+
+let addButton
+
+function myInputEvent() {
+	console.log('you are typing: ', this.value());
+}
 
 function setup() {
 	createCanvas(windowWidth, windowHeight);
 
 	firstThird = windowWidth / 3
 	secondThird = 2 * windowWidth / 3
-
-	addButton = new AddButton(windowWidth - 1.3 * windowWidth / 20, 
-							  windowHeight - 1.3 * windowWidth / 20, 
+	 
+	addButton = new AddButton(windowWidth - 1 * windowWidth / 20, 
+							  windowHeight - 1 * windowWidth / 20, 
 							  windowWidth / 20, 
 							  windowWidth / 20)
 
@@ -37,6 +43,11 @@ function draw() {
 
 function mouseClicked() {
 	let clickedPost = false
+	if (addButton.gotClicked(mouseX, mouseY)) {
+		addButton.clicked()
+		clickedPost = true
+	}
+
 	for (let post of posts) {
 		if (post.gotClicked(mouseX, mouseY)) {
 			post.clicked()
@@ -44,14 +55,19 @@ function mouseClicked() {
 			break
 		}
 	}
+}
 
-	if (!clickedPost) {
-		posts.push(new Post(mouseX, mouseY, "Hello World"))
+function keyPressed() {
+	if (outlineState && (keyCode === BACKSPACE || keyCode === DELETE)) {
+		posts[posts.length - 1].obj.delete()
 	}
 }
 
 function mouseMoved() {
 	let onlyOne = false
+	if (addButton.gotClicked(mouseX, mouseY)){
+		onlyOne = true
+	}
 	for (let post of posts.slice().reverse()) {
 		if (post.gotClicked(mouseX, mouseY) && !onlyOne) {
 			post.hoverState = true

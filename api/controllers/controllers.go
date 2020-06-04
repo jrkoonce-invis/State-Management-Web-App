@@ -8,10 +8,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
@@ -66,12 +66,12 @@ func GetPosts(c *gin.Context) {
 }
 
 func DeletePost(c *gin.Context) {
-	givenID := c.Param("id")
+	givenID := c.Params.ByName("id")
 	collection := db.GetData()
 
-	id, _ := primitive.ObjectIDFromHex(givenID)
+	id, _ := strconv.Atoi(givenID)
 
-	deleteResult, err := collection.DeleteOne(context.TODO(), bson.M{"_id": id})
+	deleteResult, err := collection.DeleteOne(context.TODO(), bson.M{"number": id})
 	if err != nil {
 		log.Fatal(err)
 	}

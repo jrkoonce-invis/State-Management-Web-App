@@ -5,7 +5,8 @@ function getData() {
         .then(response => response.json())
         .then(results => {
             results.forEach(result => {
-                posts.push(new Post(Math.random() * windowWidth, Math.random() * windowHeight, result.text))
+                posts.push(new Post(Math.random() * windowWidth, Math.random() * windowHeight, result.text, result.number))
+                postNum = posts[posts.length - 1].number
             });
         })
         .catch(function(err) {
@@ -13,8 +14,8 @@ function getData() {
         })
 }
 
-function createPost(text, number, x, y) {
-    let data = { text: text, number: number }
+function createPost(text, x, y) {
+    let data = { text: text, number: postNum + 1 }
 
     fetch(url, {
         method: "POST",
@@ -24,5 +25,12 @@ function createPost(text, number, x, y) {
         body: JSON.stringify(data)
     })
 
-    posts.push(new Post(x, y, text))
+    posts.push(new Post(x, y, text, postNum + 1))
+    postNum++
+}
+
+function deletePost(id) {
+    fetch(url + "/" + id, {
+        method: "delete",
+    })
 }
