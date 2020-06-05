@@ -1,10 +1,10 @@
 let posts = []
-let postNum
 
 let firstThird
 let secondThird
 
 let addButton
+let postNum = 0
 
 function myInputEvent() {
 	console.log('you are typing: ', this.value());

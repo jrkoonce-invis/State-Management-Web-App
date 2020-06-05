@@ -1,7 +1,9 @@
 const url = 'http://localhost:5000/api'
 
 function getData() {
-    fetch(url)
+    fetch(url, {
+        credentials: "same-origin"
+    })
         .then(response => response.json())
         .then(results => {
             results.forEach(result => {
@@ -16,21 +18,23 @@ function getData() {
 
 function createPost(text, x, y) {
     let data = { text: text, number: postNum + 1 }
+    posts.push(new Post(x, y, text, postNum + 1))
+    postNum++
 
     fetch(url, {
+        credentials: "same-origin",
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(data)
     })
-
-    posts.push(new Post(x, y, text, postNum + 1))
-    postNum++
 }
 
 function deletePost(id) {
+    console.log(id)
     fetch(url + "/" + id, {
+        credentials: "same-origin",
         method: "delete",
     })
 }

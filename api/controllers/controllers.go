@@ -12,11 +12,22 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func AddPost(c *gin.Context) {
+func sessionMiddleware(c *gin.Context) int {
 
+	cookie, err := c.Cookie("stateSessionCookie")
+	if err != nil {
+		strnum := strconv.Itoa(db.AddUser())
+		c.SetCookie("stateSessionCookie", strnum, 300, "/", "localhost", false, true)
+		cookie = strnum
+	}
+
+	value, _ := strconv.Atoi(cookie)
+	return value
+}
+
+func AddPost(c *gin.Context) {
 	var post models.Post
 	body := c.Request.Body
 	data, _ := ioutil.ReadAll(body)
@@ -26,55 +37,55 @@ func AddPost(c *gin.Context) {
 		fmt.Println(err)
 	}
 
+	userid := sessionMiddleware(c)
 	collection := db.GetData()
-	insertResult, err := collection.InsertOne(context.TODO(), post)
+
+	filter := bson.D{{"userid", userid}}
+	update := bson.D{{"$push", bson.D{{"posts", post}}}}
+
+	_, err = collection.UpdateOne(context.TODO(), filter, update)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println("Inserted a single document: ", insertResult.InsertedID)
 }
 
 func GetPosts(c *gin.Context) {
 	var results []models.Post
 
-	findOptions := options.Find()
-
+	userid := sessionMiddleware(c)
 	collection := db.GetData()
-	cur, err := collection.Find(context.TODO(), bson.D{{}}, findOptions)
+
+	var user models.User
+	filter := bson.D{{"userid", userid}}
+
+	err := collection.FindOne(context.TODO(), filter).Decode(&user)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	for cur.Next(context.TODO()) {
-
-		var elem models.Post
-		err := cur.Decode(&elem)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		results = append(results, elem)
+	for _, post := range user.Posts {
+		results = append(results, post)
 	}
-	if err := cur.Err(); err != nil {
-		log.Fatal(err)
-	}
-	cur.Close(context.TODO())
 
 	stuff, _ := json.Marshal(results)
 	c.String(200, string(stuff))
 }
 
 func DeletePost(c *gin.Context) {
-	givenID := c.Params.ByName("id")
+	param := c.Params.ByName("id")
+	givenID, _ := strconv.Atoi(param)
+
+	userid := sessionMiddleware(c)
 	collection := db.GetData()
 
-	id, _ := strconv.Atoi(givenID)
+	filter := bson.D{{"userid", userid}}
+	update := bson.D{{"$pull", bson.D{{"posts", bson.D{{"number", givenID}}}}}}
 
-	deleteResult, err := collection.DeleteOne(context.TODO(), bson.M{"number": id})
+	fmt.Println("hello")
+
+	_, err := collection.UpdateOne(context.TODO(), filter, update)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	fmt.Printf("deleted count: %d\n", deleteResult.DeletedCount)
 }

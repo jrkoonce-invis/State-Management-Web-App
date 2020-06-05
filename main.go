@@ -21,7 +21,9 @@ func setupRouter() *gin.Engine {
 	router.DELETE("/api/:id", controllers.DeletePost)
 
 	// Site
-	router.LoadHTMLGlob("ui-dist/*")
+	router.Static("/src", "./p5-ui/src")
+	router.Static("/libraries", "./p5-ui/libraries")
+	router.LoadHTMLFiles("./p5-ui/index.html")
 	router.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", nil)
 	})
