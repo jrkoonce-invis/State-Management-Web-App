@@ -12,7 +12,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-const url string = "... your url here ..."
+const url string = "mongodb+srv://jrkoonce:gEPVRUcnD2pEQRH2@cluster0-xonxu.gcp.mongodb.net/test?retryWrites=true&w=majority"
 
 func GetData() *mongo.Collection {
 	clientOptions := options.Client().ApplyURI(url)
