@@ -1,4 +1,4 @@
-const url = 'http://localhost:5000/api'
+const url = '../../api'
 
 function getData() {
     fetch(url, {
@@ -32,7 +32,6 @@ function createPost(text, x, y) {
 }
 
 function deletePost(id) {
-    console.log(id)
     fetch(url + "/" + id, {
         credentials: "same-origin",
         method: "delete",

@@ -82,8 +82,6 @@ func DeletePost(c *gin.Context) {
 	filter := bson.D{{"userid", userid}}
 	update := bson.D{{"$pull", bson.D{{"posts", bson.D{{"number", givenID}}}}}}
 
-	fmt.Println("hello")
-
 	_, err := collection.UpdateOne(context.TODO(), filter, update)
 	if err != nil {
 		log.Fatal(err)
