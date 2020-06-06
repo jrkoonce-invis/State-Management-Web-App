@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -12,10 +13,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-const url string = "mongodb+srv://jrkoonce:gEPVRUcnD2pEQRH2@cluster0-xonxu.gcp.mongodb.net/test?retryWrites=true&w=majority"
-
 func GetData() *mongo.Collection {
-	clientOptions := options.Client().ApplyURI(url)
+	uri := os.Getenv("MONGODB_URI")
+	clientOptions := options.Client().ApplyURI(uri)
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
 		fmt.Println(err)
@@ -32,7 +32,8 @@ func GetData() *mongo.Collection {
 }
 
 func AddUser() int {
-	clientOptions := options.Client().ApplyURI(url)
+	uri := os.Getenv("MONGODB_URI")
+	clientOptions := options.Client().ApplyURI(uri)
 	client, err := mongo.Connect(context.TODO(), clientOptions)
 	if err != nil {
 		fmt.Println(err)
