@@ -19,7 +19,7 @@ func sessionMiddleware(c *gin.Context) int {
 	cookie, err := c.Cookie("stateSessionCookie")
 	if err != nil {
 		strnum := strconv.Itoa(db.AddUser())
-		c.SetCookie("stateSessionCookie", strnum, 300, "/", "localhost", false, true)
+		c.SetCookie("stateSessionCookie", strnum, 300, "/", "state-management-web-app.herokuapp.com", false, true)
 		cookie = strnum
 	}
 
