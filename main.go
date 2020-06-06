@@ -2,6 +2,7 @@ package main
 
 import (
 	"MySite/api/controllers"
+	"os"
 
 	"net/http"
 
@@ -9,9 +10,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const port string = ":5000"
-
 func setupRouter() *gin.Engine {
+
 	router := gin.Default()
 	router.Use(cors.Default())
 
@@ -32,7 +32,9 @@ func setupRouter() *gin.Engine {
 }
 
 func main() {
+	port := os.Getenv("PORT")
+	gin.SetMode(gin.ReleaseMode)
 	router := setupRouter()
 
-	router.Run(port)
+	router.Run(":" + port)
 }
